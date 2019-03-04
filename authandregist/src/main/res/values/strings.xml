@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AuthAndRegist</string>
+    <string name="title_activity_contacts">Contacts</string>
 </resources>

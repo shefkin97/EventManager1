@@ -1,5 +1,6 @@
 package com.example.authandregist;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -92,6 +93,9 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
         if(view.getId() == R.id.btn_sign_in)
         {
             signin(ETemail.getText().toString(),ETpassword.getText().toString());
+            Intent intent = new Intent(this, Contacts.class);
+            startActivity(intent);
+
         }else if (view.getId() == R.id.btn_registration)
         {
             registration(ETemail.getText().toString(),ETpassword.getText().toString());
