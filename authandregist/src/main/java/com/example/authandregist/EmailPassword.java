@@ -3,6 +3,7 @@ package com.example.authandregist;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.TextInputLayout;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,8 +24,8 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private EditText ETemail;
-    private EditText ETpassword;
+    private TextInputLayout ETemail;
+    private TextInputLayout ETpassword;
     private Button Sign_in;
     private Button Regist;
 
@@ -34,7 +35,9 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
+
         FirebaseApp.initializeApp(this);
+
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -63,8 +66,8 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btn_sign_in).setOnClickListener(this);
         findViewById(R.id.btn_registration).setOnClickListener(this);
 
-        ETemail.addTextChangedListener(loginTextWatcher);
-        ETpassword.addTextChangedListener(loginTextWatcher);
+        ETemail.getEditText().addTextChangedListener(loginTextWatcher);
+        ETpassword.getEditText().addTextChangedListener(loginTextWatcher);
     }
 
     private TextWatcher loginTextWatcher = new TextWatcher(){
@@ -74,8 +77,8 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String email = ETemail.getText().toString().trim();
-            String password = ETpassword.getText().toString().trim();
+            String email = ETemail.getEditText().getText().toString().trim();
+            String password = ETpassword.getEditText().getText().toString().trim();
 
             Sign_in.setEnabled(!email.isEmpty() && !password.isEmpty());
             Regist.setEnabled(!email.isEmpty() && !password.isEmpty());
@@ -92,24 +95,25 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view.getId() == R.id.btn_sign_in)
         {
-            signin(ETemail.getText().toString(),ETpassword.getText().toString());
-            Intent intent = new Intent(this, Contacts.class);
-            startActivity(intent);
+            signin(ETemail.getEditText().getText().toString(),ETpassword.getEditText().getText().toString());
 
         }else if (view.getId() == R.id.btn_registration)
         {
-            registration(ETemail.getText().toString(),ETpassword.getText().toString());
+            registration(ETemail.getEditText().getText().toString(),ETpassword.getEditText().getText().toString());
         }
 
     }
 
     public void signin(String email , String password)
     {
+        final Intent intent = new Intent(this, Contacts.class);
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if(task.isSuccessful()) {
                     Toast.makeText(EmailPassword.this, "Aвторизация успешна", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
                 }else
                     Toast.makeText(EmailPassword.this, "Aвторизация провалена", Toast.LENGTH_SHORT).show();
             }
