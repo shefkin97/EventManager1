@@ -19,16 +19,20 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class EmailPassword extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+
 
     private TextInputLayout ETemail;
     private TextInputLayout ETpassword;
     private Button Sign_in;
     private Button Regist;
-
 
 
     @Override
@@ -39,7 +43,7 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
         FirebaseApp.initializeApp(this);
 
         mAuth = FirebaseAuth.getInstance();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -69,6 +73,7 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
         ETemail.getEditText().addTextChangedListener(loginTextWatcher);
         ETpassword.getEditText().addTextChangedListener(loginTextWatcher);
     }
+
 
     private TextWatcher loginTextWatcher = new TextWatcher(){
         @Override
@@ -125,6 +130,7 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
+                    onAuthSuccess(task.getResult().getUser());
                     Toast.makeText(EmailPassword.this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -132,5 +138,30 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        //String username = usernameFromEmail(user.getEmail());
+
+        // Write new user
+        writeNewUser(user.getUid(),user.getEmail());
+
+    }
+
+   /* private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
+    }*/
+
+    private void writeNewUser(String userId,String email) {
+       User user = new User(email);
+
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+
+
+
 }
 
