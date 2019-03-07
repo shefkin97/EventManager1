@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">AuthAndRegist</string>
     <string name="title_activity_contacts">Contacts</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="heading_recent">Recent</string>
+    <string name="heading_my_posts">My Posts</string>
+    <string name="heading_my_top_posts">My Top Posts</string>
+    <string name="menu_logout">Log out</string>
 </resources>
