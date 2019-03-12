@@ -30,7 +30,6 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
 
     private TextInputLayout ETemail;
     private TextInputLayout ETpassword;
-    private TextInputLayout ETusername;
     private Button Sign_in;
     private Button Regist;
 
@@ -61,7 +60,7 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
 
         ETemail = findViewById(R.id.et_email);
         ETpassword = findViewById(R.id.et_password);
-        ETusername = findViewById(R.id.et_username);
+
         Sign_in = findViewById(R.id.btn_sign_in);
         Regist = findViewById(R.id.btn_registration);
 
@@ -73,7 +72,6 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
 
         ETemail.getEditText().addTextChangedListener(loginTextWatcher);
         ETpassword.getEditText().addTextChangedListener(loginTextWatcher);
-        ETusername.getEditText().addTextChangedListener(loginTextWatcher);
     }
 
 
@@ -86,10 +84,9 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String email = ETemail.getEditText().getText().toString().trim();
             String password = ETpassword.getEditText().getText().toString().trim();
-            String username = ETusername.getEditText().getText().toString().trim();
 
-            Sign_in.setEnabled(!email.isEmpty() && !password.isEmpty() && !username.isEmpty());
-            Regist.setEnabled(!email.isEmpty() && !password.isEmpty() && !username.isEmpty());
+            Sign_in.setEnabled(!email.isEmpty() && !password.isEmpty());
+            Regist.setEnabled(!email.isEmpty() && !password.isEmpty());
         }
 
         @Override
@@ -119,7 +116,8 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if(task.isSuccessful()) {
-                    onAuthSuccess(task.getResult().getUser());
+                    task.getResult().getUser();
+                    startActivity(new Intent(EmailPassword.this, MainActivity.class));
                     Toast.makeText(EmailPassword.this, "Aвторизация успешна", Toast.LENGTH_SHORT).show();
                 }else
                     Toast.makeText(EmailPassword.this, "Aвторизация провалена", Toast.LENGTH_SHORT).show();
@@ -133,6 +131,7 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
                 if(task.isSuccessful())
                 {
                     onAuthSuccess(task.getResult().getUser());
+                    startActivity(new Intent(EmailPassword.this, SetupActivity.class));
                     Toast.makeText(EmailPassword.this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
                 }
                 else
@@ -143,14 +142,13 @@ public class EmailPassword extends AppCompatActivity implements View.OnClickList
 
     private void onAuthSuccess(FirebaseUser user) {
 
-        String username = ETusername.getEditText().getText().toString();
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail());
+        writeNewUser(user.getUid(), user.getEmail());
         startActivity(new Intent(EmailPassword.this, MainActivity.class));
     }
 
-    private void writeNewUser(String userId, String name,String email) {
-       User user = new User(email, name);
+    private void writeNewUser(String userId, String email) {
+       User user = new User(email);
 
         mDatabase.child("users").child(userId).setValue(user);
     }

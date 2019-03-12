@@ -1,6 +1,8 @@
 package com.example.authandregist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.quickstart.database.java.models.Comment;
-import com.google.firebase.quickstart.database.java.models.Post;
-import com.google.firebase.quickstart.database.java.models.User;
+import com.example.authandregist.models.Comment;
+import com.example.authandregist.models.Post;
+import com.example.authandregist.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mCommentsRecycler = findViewById(R.id.recyclerPostComments);
 
         mCommentButton.setOnClickListener(this);
+        findViewById(R.id.postAuthorPhoto).setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
     }
@@ -84,13 +88,14 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Post post = dataSnapshot.getValue(Post.class);
-                // [START_EXCLUDE]
-                mAuthorView.setText(post.author);
-                mTitleView.setText(post.title);
-                mBodyView.setText(post.body);
-                // [END_EXCLUDE]
+                if (dataSnapshot.exists()) {
+                    Post post = dataSnapshot.getValue(Post.class);
+                    // [START_EXCLUDE]
+                    mAuthorView.setText(post.author);
+                    mTitleView.setText(post.title);
+                    mBodyView.setText(post.body);
+                    // [END_EXCLUDE]
+                }
             }
 
             @Override
@@ -132,6 +137,13 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         int i = v.getId();
         if (i == R.id.buttonPostComment) {
             postComment();
+        }
+        if (v.getId() == R.id.postAuthorPhoto) {
+            startActivity(new Intent(PostDetailActivity.this, User_Profile.class));
+            /*Intent intent = new Intent(PostDetailActivity.this, User_Profile.class);
+            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, mPostKey);
+            startActivity(intent);*/
+
         }
     }
 

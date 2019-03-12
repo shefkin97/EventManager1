@@ -1,8 +1,11 @@
-package com.google.firebase.quickstart.database.java.models;
+package com.example.authandregist.models;
+
+import android.net.Uri;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +13,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Post {
 
+    public String uploadId;
     public String uid;
     public String author;
     public String title;
@@ -26,7 +30,9 @@ public class Post {
         this.author = author;
         this.title = title;
         this.body = body;
+
     }
+
 
     // [START post_to_map]
     @Exclude

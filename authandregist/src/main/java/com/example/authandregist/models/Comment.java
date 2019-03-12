@@ -1,4 +1,4 @@
-package com.google.firebase.quickstart.database.java.models;
+package com.example.authandregist.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

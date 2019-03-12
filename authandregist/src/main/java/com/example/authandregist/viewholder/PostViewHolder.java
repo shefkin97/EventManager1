@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 
 import com.example.authandregist.R;
-import com.google.firebase.quickstart.database.java.models.Post;
+import com.example.authandregist.models.Post;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 

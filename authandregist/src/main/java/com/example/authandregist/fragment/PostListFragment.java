@@ -24,7 +24,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 
-import com.google.firebase.quickstart.database.java.models.Post;
+import com.example.authandregist.models.Post;
 
 
 public abstract class PostListFragment extends Fragment {
