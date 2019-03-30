@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -42,12 +43,13 @@ public class SetupActivity extends AppCompatActivity
 {
     private TextInputLayout Username, Phone, Gender, City;
     private Button Save;
-    private CircleImageView ProfileImage;
+    private CircleImageView profileimage;
     private ProgressDialog loadingBar;
 
     private FirebaseAuth mAuth;
     private DatabaseReference profileUserRef;
     private StorageReference UserProfileImageRef;
+    //private Uri ImageUri;
 
     String currentUserID;
     final static int Gallery_Pick = 1;
@@ -69,7 +71,7 @@ public class SetupActivity extends AppCompatActivity
         City =  findViewById(R.id.city);
         Username =  findViewById(R.id.et_username);
         Phone =  findViewById(R.id.et_phoneNumber);
-        ProfileImage = findViewById(R.id.profile_image);
+        profileimage = findViewById(R.id.profile_image);
         Save = findViewById(R.id.btn_save);
         loadingBar = new ProgressDialog(this);
 
@@ -83,7 +85,7 @@ public class SetupActivity extends AppCompatActivity
         });
 
 
-        ProfileImage.setOnClickListener(new View.OnClickListener() {
+        profileimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -104,7 +106,7 @@ public class SetupActivity extends AppCompatActivity
                     if (dataSnapshot.hasChild("profileimage"))
                     {
                         String image = dataSnapshot.child("profileimage").getValue().toString();
-                        Picasso.with(SetupActivity.this).load(image).placeholder(R.drawable.user).into(ProfileImage);
+                        Picasso.get().load(image).placeholder(R.drawable.user).into(profileimage);
                     }
                     else
                     {
@@ -160,7 +162,8 @@ public class SetupActivity extends AppCompatActivity
                         {
                             Toast.makeText(SetupActivity.this, "Profile Image stored successfully to Firebase storage...", Toast.LENGTH_SHORT).show();
 
-                            final String downloadUrl = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+                            final String downloadUrl = task.getResult().getDownloadUrl().toString();
+
 
                             profileUserRef.child("profileimage").setValue(downloadUrl)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {

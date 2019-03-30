@@ -140,9 +140,6 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         }
         if (v.getId() == R.id.postAuthorPhoto) {
             startActivity(new Intent(PostDetailActivity.this, User_Profile.class));
-            /*Intent intent = new Intent(PostDetailActivity.this, User_Profile.class);
-            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, mPostKey);
-            startActivity(intent);*/
 
         }
     }

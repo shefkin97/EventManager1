@@ -3,16 +3,12 @@ package com.example.authandregist;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.example.authandregist.models.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class User_Profile extends BaseActivity implements View.OnClickListener {
+public class User_Profile extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "User_Profile";
 
@@ -37,7 +33,7 @@ public class User_Profile extends BaseActivity implements View.OnClickListener {
     TextView gender;
     TextView city;
 
-    CircleImageView profileImage;
+    CircleImageView profileimage;
 
 
     @Override
@@ -55,7 +51,7 @@ public class User_Profile extends BaseActivity implements View.OnClickListener {
         gender = findViewById(R.id.gender);
         city = findViewById(R.id.city);
 
-        profileImage = findViewById(R.id.user_profile_image);
+        profileimage = findViewById(R.id.profile_image);
 
         profileUserRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -68,7 +64,7 @@ public class User_Profile extends BaseActivity implements View.OnClickListener {
                     String myGender = dataSnapshot.child("gender").getValue().toString();
                     String myCity = dataSnapshot.child("city").getValue().toString();
 
-                    Picasso.with(User_Profile.this).load(myProfileImage).placeholder(R.drawable.user).into(profileImage);
+                    Picasso.get().load(myProfileImage).placeholder(R.drawable.user).into(profileimage);
 
                     name.setText("Name    " + myUserName);
                     email.setText("Email    " + myEmail);
